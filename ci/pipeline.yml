@@ -1,0 +1,25 @@
+---
+resources:
+- name: timeline-repo
+  type: git
+  source:
+    uri: git@github.com:crsimmons/public-cf-provider-timeline-v2.git
+    branch: master
+    private_key: ((private_key))
+
+- name: capi-release
+  type: github-release
+  source:
+    owner: cloudfoundry
+    repository: capi-release
+    access_token: ((api_token))
+
+jobs:
+- name: capi-list
+  plan:
+  - get: capi-release
+    version: every
+    globs: [""]
+  - get: timeline-repo
+  - task: build-list
+    file: timeline-repo/ci/tasks/capi-list.yml
