@@ -19,7 +19,10 @@ jobs:
   plan:
   - get: capi-release
     version: every
-    globs: [""]
+    params:
+      globs: [""]
   - get: timeline-repo
   - task: build-list
     file: timeline-repo/ci/tasks/capi-list.yml
+    params:
+      API_TOKEN: ((api_token))

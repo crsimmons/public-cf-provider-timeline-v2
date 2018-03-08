@@ -13,3 +13,6 @@ inputs:
 
 run:
   path: timeline-repo/ci/tasks/capi-list.sh
+
+params:
+  API_TOKEN:
