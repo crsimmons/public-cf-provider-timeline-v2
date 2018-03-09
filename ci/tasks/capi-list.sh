@@ -7,12 +7,11 @@ curl -s -H "Authorization: token ${API_TOKEN}" \
   | jq -r '.[] | {tag_name,body,published_at}' \
   > releases
 
-api=$(
-  jq '.body' releases \
+jq '.body' releases \
   | grep -F '**CC API Version:' \
-  | grep -oE "2\.[0-9]+\.[0-9]+"
-)
+  | grep -oE "2\.[0-9]+\.[0-9]+" \
+  > api
 
-date=$(jq -r '.published_at' releases)
+jq -r '.published_at' releases > date
 
-paste -d,  "${api}" "${date}" | sed '/^,/d'
+sed '/^,/d' <(paste -d,  api date)
