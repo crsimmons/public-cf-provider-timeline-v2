@@ -2,16 +2,18 @@
 
 set -eux
 
-tag=$(cat capi-release/tag)
+releases=$(
+  curl -s -H "Authorization: token ${API_TOKEN}" \
+  https://api.github.com/repos/cloudfoundry/capi-release/releases \
+  | jq -r '.[] | {tag_name,body,published_at}'
+)
 
-version=$(
-  grep -F '**CC API Version:' capi-release/body \
+api=$(
+  jq '.body' "${releases}" \
+  | grep -F '**CC API Version:' \
   | grep -oE "2\.[0-9]+\.[0-9]+"
 )
 
-date=$(
-  curl -s -H "Authorization: token ${API_TOKEN}" "https://api.github.com/repos/cloudfoundry/capi-release/releases/tags/${tag}" \
-  | jq -r '.published_at'
-)
+date=$(jq -r '.published_at' "${releases}")
 
-echo "${version},${date}"
+paste -d,  "${api}" "${date}" | sed '/^,/d'
