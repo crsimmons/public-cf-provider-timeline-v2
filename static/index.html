@@ -127,6 +127,10 @@
         var version = formattedArray[i].Version;
         base.x = date;
         baseDate.x = date;
+        if (toDate(dateSwap(date)) < monthsDates[0]) {
+          base.x = monthsDates[0]
+          baseDate.x = monthsDates[0]
+        }
         base.text = formattedArray[i].Provider;
         baseDate.text = "v" + version + " released on " + date;
         if (Math.abs(offset) > 150) {
@@ -148,7 +152,7 @@
 
     var data = [
       {
-        x: months.map(toDate),
+        x: monthsDates,
         y: new Array(months.length).fill(""),
         type: 'line'
       }
@@ -161,7 +165,7 @@
       xaxis:
       {
         type: 'date',
-        tickvals: months.map(toDate),
+        tickvals: monthsDates,
         ticktext: months,
         tickfont:
         {
