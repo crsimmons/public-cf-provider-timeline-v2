@@ -80,6 +80,11 @@ func getAPIVersions(client http.Client, apis providerAPIs) ([]apiVersion, error)
 	var versions []apiVersion
 
 	for _, api := range apis.APIs {
+		// Predix and fujitsu are running ancient versions and appear to be forgotten
+		// So ignoring them so as to not skew the graph too much
+		if api.Provider == "predix-basic" || api.Provider == "fujitsu_k5_jp2" {
+			continue
+		}
 		var v apiVersion
 		v.Provider = api.Provider
 		url := api.Settings.Url
