@@ -4,6 +4,9 @@ CF public provider timeline V2
 Made by:
  - Colin // @c_r_simmons
 
+Source code:
+- https://github.com/crsimmons/public-cf-provider-timeline-v2
+
 Based on original site by:
  - Jonathan // @jpluscplusm
  - Colin // @c_r_simmons
