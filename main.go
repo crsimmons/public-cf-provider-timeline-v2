@@ -176,8 +176,9 @@ func generateVersions() {
 }
 
 func main() {
+	generateVersions()
 	c := cron.New()
-	c.AddFunc("@every 30s", generateVersions)
+	c.AddFunc("@every 1h", generateVersions)
 	c.Start()
 
 	http.Handle("/", http.FileServer(http.Dir("static")))
