@@ -186,6 +186,7 @@ func main() {
 	c.AddFunc("@every 1h", generateVersions)
 	c.Start()
 
+	fmt.Println("INFO: starting server")
 	http.Handle("/", http.FileServer(http.Dir("static")))
 	port, set := os.LookupEnv("PORT")
 	if !set {
