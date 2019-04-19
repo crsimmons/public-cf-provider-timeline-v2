@@ -45,12 +45,13 @@
     var formattedArray = formatArray(versions)
     var datesArray = buildDatesArray(formattedArray)
     var months = getMonths()
+    var monthsDates = months.map(toDate)
 
     function getMonths() {
-      var startYear = new Date().getFullYear() - 3;
+      var startYear = new Date().getFullYear() - 1;
       var startMonth = new Date().getMonth() + 1;
       var arr = [];
-      for (var i = 0; i < 38; i++) {
+      for (var i = 0; i < 14; i++) {
         var month = (startMonth + i) % 12;
         if (month === 0) {
           month = 12;
