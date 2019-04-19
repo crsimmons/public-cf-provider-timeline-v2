@@ -1,0 +1,13 @@
+applications:
+- name: cf-providers-timeline
+  buildpacks:
+  - binary_buildpack
+  disk_quota: 1G
+  instances: 1
+  memory: 16M
+  random_route: true
+  stack: cflinuxfs3
+  env:
+    TOKEN: ((github_token))
+  routes:
+  - route: cf-timeline.crsimmons.dev

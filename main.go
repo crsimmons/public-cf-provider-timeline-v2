@@ -9,7 +9,11 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"sort"
 	"time"
+
+	"github.com/Masterminds/semver"
+	"github.com/robfig/cron"
 )
 
 type providerAPIs struct {
@@ -128,40 +132,58 @@ func constructCapiArray(client http.Client) ([]parsedCapiMap, error) {
 	return o, nil
 }
 
-func main() {
+func generateVersions() {
 	timeout := time.Duration(5 * time.Second)
-	client := http.Client{
-		Timeout: timeout,
-	}
+	client := http.Client{Timeout: timeout}
 	apis, err := fetchAPIs(client)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("ERROR: %s\n", err)
+		return
 	}
+	fmt.Println("INFO: getting provider api versions")
 	versions, err := getAPIVersions(client, apis)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("ERROR: %s\n", err)
+		return
 	}
+	fmt.Println("INFO: getting capi versions")
 	capiArray, err := constructCapiArray(client)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("ERROR: %s\n", err)
+		return
 	}
+	fmt.Println("INFO: converging json")
 	finalMap := convergeData(versions, capiArray)
+
+	sort.Slice(finalMap, func(i, j int) bool {
+		v1, _ := semver.NewVersion(finalMap[i].Version)
+		v2, _ := semver.NewVersion(finalMap[j].Version)
+		return v1.Compare(v2) <= 0
+	})
 
 	finalBytes, err := json.Marshal(finalMap)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("ERROR: %s\n", err)
+		return
 	}
+	fmt.Println("INFO: writing versions file")
 	finalBytes = append([]byte("var versions = "), finalBytes...)
 	err = ioutil.WriteFile("./static/versions.js", finalBytes, 0666)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("ERROR: %s\n", err)
+		return
 	}
-	// writeProviderVersions()
-	// writeCapiVersions()
-	// c := cron.New()
-	// c.AddFunc("@every 30s", writeProviderVersions)
-	// c.AddFunc("@every 30s", writeCapiVersions)
-	// c.Start()
+}
+
+func main() {
+	c := cron.New()
+	c.AddFunc("@every 30s", generateVersions)
+	c.Start()
+
 	http.Handle("/", http.FileServer(http.Dir("static")))
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	port, set := os.LookupEnv("PORT")
+	if !set {
+		port = "8080"
+	}
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }

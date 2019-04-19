@@ -1,9 +1,190 @@
+<!DOCTYPE html>
+<meta charset='utf-8'>
+
 <head>
+  <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script type="text/javascript" src="versions.js"></script>
 </head>
 
-<p>Hello World</p>
+<body>
+  <div id="plotDiv"></div>
+  <script type="text/javascript">
+    var dateFormat = Plotly.d3.time.format("%d/%m/%Y");
 
-<script>
-  console.log(versions)
-</script>
+    var baseFormat = {
+      y: 0,
+      align: "center",
+      arrowcolor: "rgba(0, 0, 0, 0)",
+      ax: -0,
+      bgcolor: "rgba(50, 100, 255, .25)",
+      bordercolor: "rgba(0, 0, 0, 0)",
+      borderpad: 3,
+      borderwidth: 0,
+      font: { size: 14 },
+      textangle: 0,
+      yref: 'y'
+    }
+
+    var baseDateFormat = {
+      y: 0,
+      align: "center",
+      arrowcolor: "rgba(0, 0, 0, 0.25)",
+      arrowhead: 5,
+      arrowsize: 1,
+      ax: -0,
+      bgcolor: "rgba(0, 255, 0, 0.25)",
+      bordercolor: "rgba(0, 0, 0, 0)",
+      borderpad: 3,
+      borderwidth: 0,
+      font: { size: 10 },
+      textangle: 0,
+      yref: 'y'
+    }
+
+    var formattedArray = formatArray(versions)
+    var datesArray = buildDatesArray(formattedArray)
+    var months = getMonths()
+
+    function getMonths() {
+      var startYear = new Date().getFullYear() - 3;
+      var startMonth = new Date().getMonth() + 1;
+      var arr = [];
+      for (var i = 0; i < 38; i++) {
+        var month = (startMonth + i) % 12;
+        if (month === 0) {
+          month = 12;
+        }
+        arr.push("1/" + month + "/" + startYear);
+        if (month === 12) {
+          startYear++;
+        }
+      }
+      return arr;
+    }
+
+    function formatArray(v) {
+      return formatDates(removeDupes(v))
+    }
+
+    function removeDupes(v) {
+      for (var i = v.length - 1; i > 0; i--) {
+        if (v[i].Version === v[i - 1].Version) {
+          v[i - 1].Provider = v[i - 1].Provider.concat(" + ", v[i].Provider);
+          v.splice(i, 1);
+        }
+      }
+      return v;
+    }
+
+    function formatDates(v) {
+      for (var i = 0; i < v.length; i++) {
+        v[i].Date = v[i].Date.split('T', -1)[0]
+      }
+      return v
+    }
+
+    function buildDatesArray(v) {
+      var o = []
+      for (var i = 0; i < v.length - 1; i++) {
+        o.push(v[i].Date)
+      }
+      return o
+    }
+
+    function toDate(d) {
+      return dateFormat.parse(d).getTime();
+    }
+
+    function dateSwap(date) {
+      var arr = date.split("-");
+      return arr.reverse().join("/");
+    }
+
+    function buildTodayMarker() {
+      var today = JSON.parse(JSON.stringify(baseDateFormat));
+      var day = new Date().getDate();
+      var month = new Date().getMonth() + 1;
+      var year = new Date().getFullYear();
+      var date = day + "/" + month + "/" + year;
+      today.x = toDate(date);
+      today.text = "Today: " + date;
+      today.ay = 25;
+
+      return today;
+    }
+
+    function annotations() {
+      var final = [];
+      var flipFlop = 1;
+      var offset = 50;
+
+      for (var i = 0; i < formattedArray.length; i++) {
+        var base = JSON.parse(JSON.stringify(baseFormat));
+        var baseDate = JSON.parse(JSON.stringify(baseDateFormat));
+        var date = formattedArray[i].Date;
+        var version = formattedArray[i].Version;
+        base.x = date;
+        baseDate.x = date;
+        base.text = formattedArray[i].Provider;
+        baseDate.text = "v" + version + " released on " + date;
+        if (Math.abs(offset) > 150) {
+          offset = 40;
+        }
+        base.ay = (Math.abs(offset) + 25) * flipFlop;
+        baseDate.ay = (Math.abs(offset)) * flipFlop;
+        flipFlop *= -1;
+        offset = base.ay + 15;
+        final.push(base);
+        final.push(baseDate);
+      }
+
+      var today = buildTodayMarker();
+      final.push(today);
+
+      return final;
+    }
+
+    var data = [
+      {
+        x: months.map(toDate),
+        y: new Array(months.length).fill(""),
+        type: 'line'
+      }
+    ];
+
+    var layout =
+    {
+      title: "Public Cloud Foundry providers: the release dates of their current CAPI versions",
+      height: 620,
+      xaxis:
+      {
+        type: 'date',
+        tickvals: months.map(toDate),
+        ticktext: months,
+        tickfont:
+        {
+          color: "rgb(107, 107, 107)",
+          size: 11
+        },
+        ticks: "outside",
+        tickwidth: 1,
+        tickangle: 40,
+        ticklen: 5,
+        showticklabels: true,
+        showline: false,
+        showgrid: true
+      },
+      yaxis:
+      {
+        showline: true,
+        range: [-10, 10]
+      }
+    };
+    layout.annotations = annotations();
+
+    Plotly.newPlot('plotDiv', data, layout, {
+      scrollZoom: true,
+      responsive: true
+    });
+  </script>
+</body>
