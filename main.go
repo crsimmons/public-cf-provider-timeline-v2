@@ -171,6 +171,14 @@ func generateVersions() {
 		fmt.Printf("ERROR: %s\n", err)
 		return
 	}
+
+	fmt.Println("INFO: writing versions JSON")
+	err = ioutil.WriteFile("./static/versions.json", finalBytes, 0666)
+	if err != nil {
+		fmt.Printf("ERROR: %s\n", err)
+		return
+	}
+
 	fmt.Println("INFO: writing versions file")
 	finalBytes = append([]byte("var versions = "), finalBytes...)
 	err = ioutil.WriteFile("./static/versions.js", finalBytes, 0666)
