@@ -5,10 +5,16 @@
   <link type="text/plain" rel="author" href="humans.txt" />
   <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script type="text/javascript" src="versions.js"></script>
+  <script type="text/javascript" src="timestamp.js"></script>
 </head>
 
 <body>
   <div id="plotDiv"></div>
+  <div>
+    <div id="now"></div>
+    <p>Raw JSON available in <a href="versions.json">versions.json</a></p>
+    <p>Source code on <a href="https://github.com/crsimmons/public-cf-provider-timeline-v2">GitHub</a></p>
+  </div>
   <script type="text/javascript">
     var dateFormat = Plotly.d3.time.format("%d/%m/%Y");
 
@@ -46,6 +52,8 @@
     var datesArray = buildDatesArray(formattedArray)
     var months = getMonths()
     var monthsDates = months.map(toDate)
+
+    document.getElementById("now").innerText = timestamp
 
     function getMonths() {
       var startYear = new Date().getFullYear() - 1;

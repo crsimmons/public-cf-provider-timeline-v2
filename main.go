@@ -166,6 +166,16 @@ func generateVersions() {
 		return v1.Compare(v2) <= 0
 	})
 
+	fmt.Println("INFO: writing timestamp file")
+	timestamp := time.Now().UTC().String()
+	timestampContents := fmt.Sprintf("var timestamp = \"Backend data last generated at: %s\"", timestamp)
+	timestampBytes := []byte(timestampContents)
+	err = ioutil.WriteFile("./static/timestamp.js", timestampBytes, 0666)
+	if err != nil {
+		fmt.Printf("ERROR: %s\n", err)
+		return
+	}
+
 	finalBytes, err := json.Marshal(finalMap)
 	if err != nil {
 		fmt.Printf("ERROR: %s\n", err)
