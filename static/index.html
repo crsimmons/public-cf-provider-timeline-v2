@@ -135,7 +135,9 @@
         var version = formattedArray[i].Version;
         base.x = date;
         baseDate.x = date;
+        // if CAPI is older than a year, put at start of scale and make annotation red
         if (toDate(dateSwap(date)) < monthsDates[0]) {
+          base.bgcolor = "rgba(255, 100, 50, .5)"
           base.x = monthsDates[0]
           baseDate.x = monthsDates[0]
         }
