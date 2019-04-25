@@ -3,7 +3,7 @@ resources:
 - name: public-cf-provider-timeline-v2
   type: git
   source:
-    uri: https://github.com/crsimmons/public-cf-provider-timeline-v2.git
+    uri: git@github.com:crsimmons/public-cf-provider-timeline-v2.git
     branch: master
     private_key: ((private_key))
     paths:
