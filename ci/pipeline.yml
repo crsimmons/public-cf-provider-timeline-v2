@@ -52,6 +52,7 @@ jobs:
   - put: cf
     params:
       manifest: built-app/manifest.yml
+      path: built-app
       current_app_name: cf-providers-timeline
       environment_variables:
         TOKEN: ((github_access_token))
