@@ -41,7 +41,9 @@ jobs:
         args:
         - -euc
         - |
+          go get -u github.com/gobuffalo/packr/v2/packr2
           cd public-cf-provider-timeline-v2 || exit 1
+          packr2
           cp -r static ../built-app/
           cp Procfile manifest.yml ../built-app/
           go build -o ../built-app/app main.go

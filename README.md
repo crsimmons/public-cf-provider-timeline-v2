@@ -10,4 +10,4 @@ The front end is inspired from an app I built with @jpluscplusm a few years ago 
 
 ## Adding APIs
 
-Do you run a public CF PaaS that isn't included? You can add it by PRing your API to [this file](providers.json).
+Do you run a public CF PaaS that isn't included? You can add it by PRing your API to [this file](assets/providers.json).

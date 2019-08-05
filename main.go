@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/Masterminds/semver"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/robfig/cron"
 )
 
@@ -55,20 +56,6 @@ func convergeData(providerVersions []apiVersion, capiVersions []parsedCapiMap) [
 		}
 	}
 	return finalArray
-}
-
-func fetchAPIs() ([]providerAPI, error) {
-	var apis []providerAPI
-	providersFile, err := ioutil.ReadFile("providers.json")
-	if err != nil {
-		return []providerAPI{}, err
-	}
-
-	err = json.Unmarshal([]byte(providersFile), &apis)
-	if err != nil {
-		return []providerAPI{}, err
-	}
-	return apis, nil
 }
 
 func getAPIVersions(client http.Client, apis []providerAPI) ([]apiVersion, error) {
@@ -127,14 +114,10 @@ func constructCapiArray(client http.Client) ([]parsedCapiMap, error) {
 	return o, nil
 }
 
-func generateVersions() {
+func generateVersions(apis []providerAPI) {
 	timeout := time.Duration(5 * time.Second)
 	client := http.Client{Timeout: timeout}
-	apis, err := fetchAPIs()
-	if err != nil {
-		fmt.Printf("ERROR: %s\n", err)
-		return
-	}
+
 	fmt.Println("INFO: getting provider api versions")
 	versions, err := getAPIVersions(client, apis)
 	if err != nil {
@@ -189,9 +172,23 @@ func generateVersions() {
 }
 
 func main() {
-	generateVersions()
+	var apis []providerAPI
+
+	box := packr.New("assets", "./assets")
+
+	providersBytes, err := box.Find("providers.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = json.Unmarshal(providersBytes, &apis)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	generateVersions(apis)
 	c := cron.New()
-	c.AddFunc("@every 1h", generateVersions)
+	c.AddFunc("@every 1h", func() { generateVersions(apis) })
 	c.Start()
 
 	fmt.Println("INFO: starting server")

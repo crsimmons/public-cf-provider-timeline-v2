@@ -1,6 +1,7 @@
 applications:
 - name: cf-providers-timeline
-  buildpack: binary_buildpack
+  buildpacks:
+  - binary_buildpack
   disk_quota: 1G
   instances: 1
   memory: 32M
