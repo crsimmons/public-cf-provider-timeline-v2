@@ -6,3 +6,4 @@ LICENSE
 deploy.sh
 go.mod
 go.sum
+utils

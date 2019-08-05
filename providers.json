@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Anynines",
+    "url": "https://api.de.a9s.eu/v2/info"
+  },
+  {
+    "name": "IBM Bluemix DE",
+    "url": "http://api.eu-de.bluemix.net/v2/info"
+  },
+  {
+    "name": "IBM Bluemix GB",
+    "url": "https://api.eu-gb.bluemix.net/v2/info"
+  },
+  {
+    "name": "IBM Bluemix SYD",
+    "url": "https://api.au-syd.bluemix.net/v2/info"
+  },
+  {
+    "name": "IBM Bluemix US",
+    "url": "https://api.ng.bluemix.net/v2/info"
+  },
+  {
+    "name": "Canopy (Atos)",
+    "url": "https://api.sys.eu01.cf.canopy-cloud.com/v2/info"
+  },
+  {
+    "name": "cloud.gov",
+    "url": "https://api.fr.cloud.gov/v2/info"
+  },
+  {
+    "name": "Fujitsu K5 JP2",
+    "url": "https://api.jp-east-2.paas-cf.cloud.global.fujitsu.com/v2/info"
+  },
+  {
+    "name": "GOV.UK Ireland",
+    "url": "https://api.cloud.service.gov.uk/v2/info"
+  },
+  {
+    "name": "GOV.UK London",
+    "url": "https://api.london.cloud.service.gov.uk/v2/info"
+  },
+  {
+    "name": "PWS (Pivotal)",
+    "url": "https://api.run.pivotal.io/v2/info"
+  },
+  {
+    "name": "Predix basic (GE)",
+    "url": "https://api.system.aws-usw02-pr.ice.predix.io/v2/info"
+  },
+  {
+    "name": "SAP HANA US",
+    "url": "https://api.cf.us10.hana.ondemand.com/v2/info"
+  },
+  {
+    "name": "Swisscom",
+    "url": "https://api.lyra-836.appcloud.swisscom.com/v2/info"
+  }
+]

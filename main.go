@@ -16,15 +16,9 @@ import (
 	"github.com/robfig/cron"
 )
 
-type providerAPIs struct {
-	APIs []providerAPI `json:"datasources"`
-}
-
 type providerAPI struct {
 	Provider string `json:"name"`
-	Settings struct {
-		Url string `json:"url"`
-	} `json:"settings"`
+	Url      string `json:"url"`
 }
 
 type apiVersion struct {
@@ -63,26 +57,27 @@ func convergeData(providerVersions []apiVersion, capiVersions []parsedCapiMap) [
 	return finalArray
 }
 
-func fetchAPIs(client http.Client) (providerAPIs, error) {
-	var apis providerAPIs
-	resp, err := client.Get("https://cf-api-version.mybluemix.net/dashboard.json")
+func fetchAPIs() ([]providerAPI, error) {
+	var apis []providerAPI
+	providersFile, err := ioutil.ReadFile("providers.json")
 	if err != nil {
-		return providerAPIs{}, err
+		return []providerAPI{}, err
 	}
-	err = json.NewDecoder(resp.Body).Decode(&apis)
+
+	err = json.Unmarshal([]byte(providersFile), &apis)
 	if err != nil {
-		return providerAPIs{}, err
+		return []providerAPI{}, err
 	}
 	return apis, nil
 }
 
-func getAPIVersions(client http.Client, apis providerAPIs) ([]apiVersion, error) {
+func getAPIVersions(client http.Client, apis []providerAPI) ([]apiVersion, error) {
 	var versions []apiVersion
 
-	for _, api := range apis.APIs {
+	for _, api := range apis {
 		var v apiVersion
 		v.Provider = api.Provider
-		url := api.Settings.Url
+		url := api.Url
 		resp, err := client.Get(url)
 		if err != nil {
 			continue
@@ -135,7 +130,7 @@ func constructCapiArray(client http.Client) ([]parsedCapiMap, error) {
 func generateVersions() {
 	timeout := time.Duration(5 * time.Second)
 	client := http.Client{Timeout: timeout}
-	apis, err := fetchAPIs(client)
+	apis, err := fetchAPIs()
 	if err != nil {
 		fmt.Printf("ERROR: %s\n", err)
 		return
