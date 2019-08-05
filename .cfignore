@@ -1,9 +1,10 @@
-public-cf-provider-timeline-v2
-README.md
-secrets.yml
-main.go
-LICENSE
+ci
 deploy.sh
 go.mod
 go.sum
+LICENSE
+main.go
+public-cf-provider-timeline-v2
+README.md
+secrets.yml
 utils

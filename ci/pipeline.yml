@@ -44,17 +44,15 @@ jobs:
           go get -u github.com/gobuffalo/packr/v2/packr2
           cd public-cf-provider-timeline-v2 || exit 1
           packr2
-          cp -r static ../built-app/
-          cp Procfile manifest.yml ../built-app/
-          go build -o ../built-app/app main.go
+          go build -o app main.go
       inputs:
       - name: public-cf-provider-timeline-v2
       outputs:
-      - name: built-app
+      - name: public-cf-provider-timeline-v2
   - put: cf
     params:
-      manifest: built-app/manifest.yml
-      path: built-app
+      manifest: public-cf-provider-timeline-v2/manifest.yml
+      path: public-cf-provider-timeline-v2
       current_app_name: cf-providers-timeline
       environment_variables:
         TOKEN: ((github_access_token))
