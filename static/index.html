@@ -78,6 +78,9 @@
 
     function removeDupes(v) {
       for (var i = v.length - 1; i > 0; i--) {
+        if (v[i].Provider == "latest") {
+          continue
+        }
         if (v[i].Version === v[i - 1].Version) {
           v[i - 1].Provider = v[i - 1].Provider.concat(" + ", v[i].Provider);
           v.splice(i, 1);
@@ -142,6 +145,12 @@
           baseDate.x = monthsDates[0]
         }
         base.text = formattedArray[i].Provider;
+
+        // Make latest release marker green
+        if (base.text == "latest") {
+          base.text = "Latest CAPI release"
+          base.bgcolor = "rgba(25, 255, 50, .5)"
+        }
         baseDate.text = "v" + version + " released on " + date;
         if (Math.abs(offset) > 150) {
           offset = 40;

@@ -48,6 +48,10 @@ type finalMap struct {
 func convergeData(providerVersions []apiVersion, capiVersions []parsedCapiMap) []finalMap {
 	var finalArray []finalMap
 
+	latestCAPIRelease := capiVersions[0]
+
+	finalArray = append(finalArray, finalMap{Provider: "latest", Version: latestCAPIRelease.Version, Date: latestCAPIRelease.Date})
+
 	for _, provider := range providerVersions {
 		for _, release := range capiVersions {
 			if provider.Version == release.Version {
@@ -124,12 +128,14 @@ func generateVersions(apis []providerAPI) {
 		fmt.Printf("ERROR: %s\n", err)
 		return
 	}
+
 	fmt.Println("INFO: getting capi versions")
 	capiArray, err := constructCapiArray(client)
 	if err != nil {
 		fmt.Printf("ERROR: %s\n", err)
 		return
 	}
+
 	fmt.Println("INFO: converging json")
 	finalMap := convergeData(versions, capiArray)
 

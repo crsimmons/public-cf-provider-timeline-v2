@@ -32,11 +32,11 @@
     "url": "https://api.jp-east-2.paas-cf.cloud.global.fujitsu.com/v2/info"
   },
   {
-    "name": "GOV.UK Ireland",
+    "name": "GOV.UK IRL",
     "url": "https://api.cloud.service.gov.uk/v2/info"
   },
   {
-    "name": "GOV.UK London",
+    "name": "GOV.UK LDN",
     "url": "https://api.london.cloud.service.gov.uk/v2/info"
   },
   {
