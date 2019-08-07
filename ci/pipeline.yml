@@ -11,6 +11,7 @@ resources:
     - manifest.yml
     - main.go
     - Procfile
+    - assets
 
 - name: cf
   type: cf
