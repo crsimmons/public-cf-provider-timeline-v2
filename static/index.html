@@ -119,8 +119,9 @@
       var month = new Date().getMonth() + 1;
       var year = new Date().getFullYear();
       var date = day + "/" + month + "/" + year;
+      var displayDate = year + "-" + month + "-" + day;
       today.x = toDate(date);
-      today.text = "Today: " + date;
+      today.text = "Today: " + displayDate;
       today.ay = 25;
 
       return today;
