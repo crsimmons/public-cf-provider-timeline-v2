@@ -77,12 +77,20 @@
     }
 
     function removeDupes(v) {
+      var maxPerLine = 5
+      var numberWithSameVersion = 0
       for (var i = v.length - 1; i > 0; i--) {
         if (v[i].Provider == "latest") {
           continue
         }
         if (v[i].Version === v[i - 1].Version) {
-          v[i - 1].Provider = v[i - 1].Provider.concat(" + ", v[i].Provider);
+          numberWithSameVersion++
+          if (numberWithSameVersion == maxPerLine) {
+            v[i - 1].Provider = v[i - 1].Provider.concat("<br>", v[i].Provider);
+            numberWithSameVersion = 0
+          } else {
+            v[i - 1].Provider = v[i - 1].Provider.concat(" + ", v[i].Provider);
+          }
           v.splice(i, 1);
         }
       }
@@ -156,7 +164,9 @@
         if (Math.abs(offset) > 150) {
           offset = 40;
         }
-        base.ay = (Math.abs(offset) + 25) * flipFlop;
+        numLinebreaks = (base.text.match(/<br>/g) || []).length
+        labelSeparation = 25 + (numLinebreaks * 10)
+        base.ay = (Math.abs(offset) + labelSeparation) * flipFlop;
         baseDate.ay = (Math.abs(offset)) * flipFlop;
         flipFlop *= -1;
         offset = base.ay + 15;
