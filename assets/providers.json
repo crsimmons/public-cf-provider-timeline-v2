@@ -58,5 +58,9 @@
   {
     "name": "cloud.gov.au",
     "url": "https://api.system.y.cld.gov.au/v2/info"
+  },
+  {
+    "name": "SUSE CAP sandbox",
+    "url": "https://api.cap.explore.suse.dev/v2/info"
   }
 ]
