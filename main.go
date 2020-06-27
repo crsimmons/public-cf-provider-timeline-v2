@@ -145,7 +145,7 @@ func generateVersions(apis []providerAPI) {
 		return v1.Compare(v2) <= 0
 	})
 
-	finalBytes, err := json.Marshal(finalMap)
+	finalBytes, err := json.MarshalIndent(finalMap, "", "  ")
 	if err != nil {
 		fmt.Printf("ERROR: %s\n", err)
 		return
