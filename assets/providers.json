@@ -52,10 +52,6 @@
     "url": "https://api.cf.us10.hana.ondemand.com/v2/info"
   },
   {
-    "name": "Swisscom",
-    "url": "https://api.lyra-836.appcloud.swisscom.com/v2/info"
-  },
-  {
     "name": "cloud.gov.au",
     "url": "https://api.system.y.cld.gov.au/v2/info"
   }
