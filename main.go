@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/Masterminds/semver"
-	"github.com/gobuffalo/packr/v2"
+	"github.com/markbates/pkger"
 	"github.com/robfig/cron"
 )
 
@@ -180,9 +180,12 @@ func generateVersions(apis []providerAPI) {
 func main() {
 	var apis []providerAPI
 
-	box := packr.New("assets", "./assets")
+	providersFile, err := pkger.Open("/assets/providers.json")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	providersBytes, err := box.Find("providers.json")
+	providersBytes, err := ioutil.ReadAll(providersFile)
 	if err != nil {
 		log.Fatal(err)
 	}

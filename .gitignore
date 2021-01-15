@@ -2,6 +2,6 @@
 secrets.yml
 public-cf-provider-timeline-v2
 app
-main-packr.go
-packrd
+app.wasm
 deploy.sh
+pkged.go
